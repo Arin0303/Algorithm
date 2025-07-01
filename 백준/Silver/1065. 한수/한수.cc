@@ -1,30 +1,26 @@
+//최적화된 코드
 #include <iostream>
 using namespace std;
 
+// 한수 판별 함수
+bool isHansoo(int n) {
+	if (n < 100) // 1~99는 모두 한수
+		return true;
+	int a = n / 100; // 백의 자리
+	int b = (n / 10) % 10; // 십의 자리
+	int c = n % 10; // 일의 자리
 
+	return (a - b) == (b - c); // 등차수열 확인
+}
 int main() {
-    int limit, result;
-    int count = 0;
-    cin >> limit;
-    // 1보다 크고 limit보다 작거나 같은 수 중에서 각 자리가 등차수열인 수의 개수 구하기
-    for (int n = 1; n <= limit; n++) {
-        if (n < 100) { // 일의자리, 십의자리
-            count++;
-        }
-        else if ((n >= 100) && (n < 1000)) { // 백의자리
-            int first, second, third; // 일의자리, 십의자리, 백의자리
-            first = n % 10;
+	int limit;
+	cin >> limit;
 
-            second = (n / 10) % 10;
-
-            third = n / 100;
-
-            int interval = third - second;
-            if ((second - first) == interval)
-                count++;
-        }
-    }
-
-    cout << count;
-    return 0;
+	int count = 0;
+	for (int i = 1; i <= limit; i++) {
+		if (isHansoo(i))
+			count++;
+	}
+	cout << count;
+	return 0;
 }
