@@ -12,9 +12,8 @@ b, c = map(int, input().split())
 result = 0
 
 for i in range(n):
-    if(a[i] > 0): # 응시자가 존재하면 
-        a[i] = a[i] - b # 총감독관 한 명 먼저 배치
-        result = result + 1 # 감독관 수 1 증가
+    a[i] = a[i] - b # 총감독관 한 명 먼저 배치
+    result = result + 1 # 감독관 수 1 증가
     
     if(a[i] > 0):    
         quote = a[i] // c
