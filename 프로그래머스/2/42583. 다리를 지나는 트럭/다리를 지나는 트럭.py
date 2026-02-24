@@ -1,28 +1,135 @@
-from collections import deque
+
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+import collections
+
+DUMMY_TRUCK = 0
+
+
+class Bridge(object):
+
+    def __init__(self, length, weight):
+        self._max_length = length
+        self._max_weight = weight
+        self._queue = collections.deque()
+        self._current_weight = 0
+
+    def push(self, truck):
+        next_weight = self._current_weight + truck
+        if next_weight <= self._max_weight and len(self._queue) < self._max_length:
+            self._queue.append(truck)
+            self._current_weight = next_weight
+            return True
+        else:
+            return False
+
+    def pop(self):
+        item = self._queue.popleft()
+        self._current_weight -= item
+        return item
+
+    def __len__(self):
+        return len(self._queue)
+
+    def __repr__(self):
+        return 'Bridge({}/{} : [{}])'.format(self._current_weight, self._max_weight, list(self._queue))
+
 
 def solution(bridge_length, weight, truck_weights):
-    # 다리에 올라갈 수 있는 트럭 수 bridge_length
-    # 다리가 견딜 수 있는 무게 weight
-    # 트럭 별 무게 truck_weights
-    
-    trucks = deque(truck_weights) # 대기 트럭 큐
-    bridge = deque([0] * bridge_length) # 다리 큐
-    time = 0
-    current_weight = 0
-    
-    while trucks or current_weight > 0: # 대기 트럭이 남아있거나 다리 위에 트럭이 남아있으면 반복
-        time += 1
-        out_truck = bridge.popleft() # 다리를 지난 버스
-        current_weight -= out_truck
-        
-        if(trucks and current_weight + trucks[0] <= weight):
-            in_truck = trucks.popleft() # 다리를 건널 버스
-            bridge.append(in_truck) # 다리에 버스 추가
-            current_weight += in_truck # 버스 무게 추가
+    bridge = Bridge(bridge_length, weight)
+    trucks = collections.deque(w for w in truck_weights)
+
+    for _ in range(bridge_length):
+        bridge.push(DUMMY_TRUCK)
+
+    count = 0
+    while trucks:
+        bridge.pop()
+
+        if bridge.push(trucks[0]):
+            trucks.popleft()
         else:
-            bridge.append(0) # 다리에서 pop한 자리 채워주기
-    return time
-            
-            
-            
-        
+            bridge.push(DUMMY_TRUCK)
+
+        count += 1
+
+    while bridge:
+        bridge.pop()
+        count += 1
+
+    return count
+
+
+def main():
+    print(solution(2, 10, [7, 4, 5, 6]), 8)
+    print(solution(100, 100, [10]), 101)
+    print(solution(100, 100, [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]), 110)
+
+
+if __name__ == '__main__':
+    main()
