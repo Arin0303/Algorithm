@@ -1,37 +1,39 @@
-import sys
-input = sys.stdin.readline
-from collections import deque # 방문 할 컴퓨터를 저장할 덱
+"""
+1-2-3 
+1-5-2
 
-comp_num = int(input()) # 컴퓨터의 수(1 ~ 100)
-pair_num = int(input()) # 연결된 컴퓨터 쌍의 수
+pair: [(1,2),(2,3),(1 5),(5,2),(5,6),(4,7)]
+pair(1,2) -> graph[1]=2 graph[2]=1: 1->2 연결, 2->1연결
 
-# 그래프 초기화
-pair_comp = {i: [] for i in range(1, comp_num + 1)}
+"""
 
+cmp = int(input())
+pair_num = int(input())
+pair = []
 
-# 연결 정보 저장
 for _ in range(pair_num):
-    comp1, comp2 = map(int, input().split())
-    pair_comp[comp1].append(comp2)
-    pair_comp[comp2].append(comp1)
+    i,j = map(int, input().split())
+    pair.append((i,j)) # 각 쌍을 튜플로 리스트에 추가
 
-def dfs(pair_comp, start_comp):
-    infected_comp = [] # 감염된 컴퓨터들을 저장할 리스트
-    soon_infected_comp = deque() # 감염될 컴퓨터들을 저장할 스택
 
-    soon_infected_comp.append(start_comp) 
+graph = []
+for _ in range(cmp+1):
+    graph.append([]) # 각 노드의 연결 정보를 빈 리스트로 생성(1번~cmp+1번)
+                        # graph[1]=[2,5]: 1번 노드의 인접 노드 = 2,5번
 
-    while soon_infected_comp:
-        comp = soon_infected_comp.pop()
+for i, j in pair:
+    graph[i].append(j)
+    graph[j].append(i)
 
-        # 감염되지 않았으면
-        if comp not in infected_comp:
-            # 감염된 리스트에 추가
-            infected_comp.append(comp)
-            soon_infected_comp.extend(pair_comp[comp]) # 연결된 컴퓨터를 곧 감염될 스택에 추가
+visited = [False] * (cmp+1) # 노드 방문 기록
 
-    # 1번을 제외한 감염된 수
-    return len(infected_comp) -1 
+def dfs(n):
+    visited[n] = True
+    for next_n in graph[n]:
+        if not visited[next_n]:
+            dfs(next_n)
 
-# 1번 컴퓨터가 바이러스에 걸렸을 때, 1번을 통해 전파되는 컴퓨터의 수
-print(dfs(pair_comp, 1))
+dfs(1)
+
+print(sum(visited)-1) # 방문한 노드 개수 (1제외)
+
