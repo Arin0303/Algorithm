@@ -1,4 +1,9 @@
+"""
+같은 우선순위: 번호 작은 것 우선
+모두 방문 -> 종료
+정점 N개 간선 M개 시작 번호 V
 
+"""
 from collections import deque
 
 n, m, v = map(int, input().split())
