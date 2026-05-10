@@ -22,7 +22,6 @@ def solution(maps):
         visited = [[0 for _ in range(m)] for _ in range(n)]
 
         queue = deque([(sr, sc)])
-        visited[sr][sc] = 1
 
         while(queue):
 
@@ -30,7 +29,7 @@ def solution(maps):
 
             # 목표 도착
             if maps[r][c] == target:
-                return visited[r][c] - 1
+                return visited[r][c] 
 
             for i in range(4):
 
