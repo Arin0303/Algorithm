@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 class Solution {
     public int[] solution(int[] answers) {
         
@@ -16,26 +18,20 @@ class Solution {
         
         // 최고 점수 계산
         int max_num = Math.max(scores[0], Math.max(scores[1], scores[2]));
+
         
-        // 최고 점수를 받은 인원 수
-        int max_count = 0;
+        int[] answer = new int[3];
         
-        for (int i=0; i<3; i++) {
-            if(max_num == scores[i])    max_count++;
-        }
-        
-        int[] answer = new int[max_count];
+        int count = 0;
         
         // 최고 점수를 받은 수포자 
-        int j = 0;
         for (int i=0; i<3; i++) {
             if (max_num == scores[i]) {
-                answer[j] = i+1;
-                j++;
+                answer[count++] = i+1;
             }
         }
         
-        return answer;
+        return Arrays.copyOf(answer, count);
         
     }
 }
